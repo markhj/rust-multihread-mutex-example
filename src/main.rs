@@ -9,7 +9,7 @@ use std::{
 };
 
 fn main() {
-    // `x` is used to initialize the Mutex, it will remain 0 throughout the program
+    // `x` is used to initialize the Mutex
     let x : i32 = 0;
 
     // Set up Mutex
