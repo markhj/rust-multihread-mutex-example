@@ -12,18 +12,21 @@ fn main() {
     // `x` is used to initialize the Mutex, it will remain 0 throughout the program
     let x : i32 = 0;
 
-    // Set up Mutex and two Arcs
-    // We need an Arc for each thread, because we instruct the variables to be moved
-    // into the threads when spawned
+    // Set up Mutex
+    // Mutex protects data shared between threads
     let mutex : Mutex<i32> = Mutex::new(x);
+
+    // Set up two Arcs
+    // The Arc type provides shared ownership of data in the HEAP memory
+    // We need an Arc for each thread, because we move the variables into the threads when spawned
     let arc_1 : Arc<Mutex<i32>> = Arc::new(mutex);
     let arc_2 : Arc<Mutex<i32>> = arc_1.clone();
 
-    // First, we spawn a thread which will increment the value of the Mutex
+    // Spawn a thread which will increment the shared value
     thread::spawn(move || {
         loop {
             // Obtain the MutexGuard
-            // The guard is locked from this point on (i.e. unusable in other threads)
+            // The guard locks from this point on (i.e. unusable in other threads)
             let mut guard : MutexGuard<i32> = arc_1.lock().unwrap();
 
             // Increment value
@@ -38,12 +41,12 @@ fn main() {
         }
     });
 
-    // Now, we spawn a second thread to read (and output) the variable
+    // Spawn a second thread to read (and output) the variable
     thread::spawn(move || {
         loop {
             // Note: We use the cloned arc_2, because arc_1 was moved into the first thread
-            // Note: In this example the guard is immutable in this thread, but if needed, you could
-            // also make this guard mutable and change the value
+            // Note: In this example the guard is immutable, but if needed, you could
+            // also make this one mutable and write to it
             let guard : MutexGuard<i32> = arc_2.lock().unwrap();
 
             // Show the user what we see
