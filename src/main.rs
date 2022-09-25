@@ -38,7 +38,7 @@ fn main() {
     });
 
     // Second, we spawn a thread to read (and output) the variable
-    thread::spawn(move ||{
+    thread::spawn(move || {
         loop {
             // Notice: We use the cloned arc_2, because arc_1 was moved into the first thread
             // In this example the guard is immutable in this thread, but if needed, you could
