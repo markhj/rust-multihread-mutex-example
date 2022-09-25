@@ -10,7 +10,7 @@ use std::{
 
 fn main() {
     // `x` is used to initialize the Mutex
-    // You can use other data types than i32, even more complicated ones like structs
+    // You can use other data types than i32, even non-primitives such as structs
     let x : i32 = 0;
 
     // Set up Mutex
